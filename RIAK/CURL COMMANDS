@@ -1,0 +1,34 @@
+// Skapar 10 användare
+curl -XPOST "$RIAK/buckets/users/keys/willy" -H "Content-Type:application/json" -d '{"firstname":"William", "lastname":"Watson","email":"wat@bmail.com","sessionTime":"3","url":"user_preferences"}'
+curl -XPOST "$RIAK/buckets/users/keys/benji" -H "Content-Type:application/json" -d '{"firstname":"Benjamin", "lastname":"Britten","email":"benji@coldmail.com","sessionTime":"23","url":"advanced_search"}'
+curl -XPOST "$RIAK/buckets/users/keys/mia35" -H "Content-Type:application/json" -d '{"firstname":"Maria", "lastname":"Svensson","email":"mai_s@bmail.com","sessionTime":"18","url":"search"}'
+curl -XPOST "$RIAK/buckets/users/keys/zero" -H "Content-Type:application/json" -d '{"firstname":"Zixten", "lastname":"Ztrömlund","email":"zero_the_hero@coldmail.com","sessionTime":"4","url":"search"}'
+curl -XPOST "$RIAK/buckets/users/keys/ayako" -H "Content-Type:application/json" -d '{"firstname":"Ayako", "lastname":"Hosono","email":"ayako_ho@coldmail.com","sessionTime":"31","url":"user_preferences"}'
+curl -XPOST "$RIAK/buckets/users/keys/marko" -H "Content-Type:application/json" -d '{"firstname":"Marko", "lastname":"Murinen","email":"marko@bmail.com","sessionTime":"58","url":"add_products"}'
+curl -XPOST "$RIAK/buckets/users/keys/billy" -H "Content-Type:application/json" -d '{"firstname":"Billy", "lastname":"Bengtsson","email":"Billy@riakdbusers.com","sessionTime":"1","url":"search"}'
+curl -XPOST "$RIAK/buckets/users/keys/stina" -H "Content-Type:application/json" -d '{"firstname":"Stina", "lastname":"Jansson","email":"stina_jansson@coldmail.com","sessionTime":"78","url":"add_products"}'
+curl -XPOST "$RIAK/buckets/users/keys/joan" -H "Content-Type:application/json" -d '{"firstname":"Joan", "lastname":"Jonas","email":"jojo@coldmail.com","sessionTime":"3","url":"search"}'
+curl -XPOST "$RIAK/buckets/users/keys/henrietta" -H "Content-Type:application/json" -d '{"firstname":"Henrietta", "lastname":"Harryson","email":"Henrietta_h@bmail.com","sessionTime":"22","url":"advanced_search"}'
+
+// Ser alla användare
+curl $RIAK/buckets/users/keys?keys=true
+
+// Söker fram användaren "willy"
+curl $RIAK/riak/users/willy
+
+// Redigerar användaren "willy", ändrar sessionstiden från "3" till "4" minuter samt ändrar URL från "user_preferences" till "search"
+curl -XPUT "$RIAK/buckets/users/keys/willy" -H "Content-Type:application/json" -d '{"firstname":"William", "lastname":"Watson","email":"wat@bmail.com","sessionTime":"4","url":"search"}'
+
+// Tar bort användaren "willy"
+curl -X DELETE $RIAK/buckets/users/keys/willy
+
+// Exporterar "users" bucket
+cd /vagrant_data/riak/riak-data-migrator-0.2.4/
+sudo java -jar riak-data-migrator-0.2.4.jar -d -r /vagrant_data/dbdumpar/riak/ -b users -h localhost
+cd /vagrant_data/dbdumpar/riak/users
+less dumpedkeys.keys
+
+// Importera tidigare dumpad data
+cd /vagrant_data/riak/riak-data-migrator-0.2.4/
+java -jar riak-data-migrator-0.2.4.jar -l -r /vagrant_data/dbdumpar/riak/ -b users -h localhost
+
