@@ -1,0 +1,100 @@
+
+cqlsh
+
+// Skapar (keyspace)DB "users"
+CREATE KEYSPACE users WITH replication = { 'class': 'SimpleStrategy', 'replication_factor':1};
+
+// Kontrollera att DB users blev skapat
+DESCRIBE KEYSPACE users
+
+// "Logga in" på users
+use users;
+
+// Skapa tabell admins i users, 
+CREATE TABLE admins (aid int, firstname text, lastname text, PRIMARY KEY (aid));
+
+// Kontrollera att admins skapades
+DESCRIBE TABLE admins;
+
+// Fyll admins med värden
+INSERT INTO admins (aid, firstname, lastname) VALUES (1, 'Robo', 'Cop');
+INSERT INTO admins (aid, firstname, lastname) VALUES (2, 'Mathilda', 'Junkbottom');
+INSERT INTO admins (aid, firstname, lastname) VALUES (3, 'HAL', '9000');
+INSERT INTO admins (aid, firstname, lastname) VALUES (4, 'Alexander', 'Masud');
+
+// Se vad som finns i admins
+SELECT * FROM admins;
+
+// Lägg till clomun i admins
+ALTER TABLE admins ADD age int;
+
+// Lägg data i nya columnen age där id = 2;
+UPDATE admins SET age = 37 WHERE aid = 2;
+
+// Exportera csv till /data
+COPY admins TO '/vagrant_data/admins.csv';
+
+// Kopiera från csvfilen moreData, 
+// obervera problem med att söka på annat än primär nycklar, då måste index skapas först.
+COPY admins (aid, firstname, lastname, age) FROM '/vagrant_data/moreAdmins.csv';
+
+
+// Ska man göra denna sökningen så måste man skapa index för "lastname" först.
+SELECT firstname FROM admins WHERE lastname ='Junkbottom';
+
+// Skapa index för "lastname";
+CREATE INDEX ON admins (lastname);
+
+// Se tiden som gått sedan värde i en column skapades
+SELECT WRITETIME (age) FROM admins WHERE aid = 2;
+
+// Skapa en kopia/ exportera av vår tabell
+COPY admins TO '/vagrant_data/admins.csv';
+
+// Skapa tabell normalUsers
+CREATE TABLE normalUsers (uid timeuuid, name varchar, sessionStarted timestamp, PRIMARY KEY (uid, name));
+
+// Fyller normalUsers
+INSERT INTO normalUsers (uid, name, sessionStarted) VALUES (now(),'Dr. Snuggles', '2015-03-26') USING TTL 86400;
+INSERT INTO normalUsers (uid, name, sessionStarted) VALUES (now(),'Dennis the Badger', '2016-10-27 12:00:00') USING TTL 3600; 
+INSERT INTO normalUsers (uid, name, sessionStarted) VALUES (now(),'Knobby Mouse', '2016-10-27 13:00:00') USING TTL 60;
+
+// Se hur långt tid Dr. Snuggles har kvar på sin sessionStarted
+SELECT TTL (sessionStarted) from normalUsers WHERE name = 'Dr. Snuggles' ALLOW FILTERING;
+
+// SET, LIST, MAP
+// SET SET SET SET SET SET
+
+CREATE KEYSPACE MovieKeyspace WITH replication = {'class': 'SimpleStrategy', 'replication_factor':1};
+
+USE MovieKeyspace;
+
+CREATE TABLE Movies (id uuid PRIMARY KEY, title text, length int, genre set<text>);
+
+INSERT INTO Movies (id, title, length, genre) VALUES (c8225135-d116-4bd3-8fd3-c89aeb6e2745,'Snow White and the Seven Dwarfs',83,{'Animation'});
+
+INSERT INTO Movies (id, title, length, genre) VALUES (47624214- bc5f-4d7b-8360-3ca909b963ee,'Cinderella',71,{'Animation'});
+
+INSERT INTO Movies (id, title, length, genre) VALUES (ca72803e-b59c-4d3e-8df7-bf8cc4654c44,'The Rescuers',78,{'Animation'});
+
+SELECT * FROM Movies;
+
+UPDATE Movies SET genre = genre + {'Fantasy','Family','Disney'} WHERE id = c8225135-d116-4bd3-8fd3-c89aeb6e2745;
+UPDATE Movies SET genre = genre - {'Disney'} WHERE id = c8225135-d116-4bd3-8fd3-c89aeb6e2745;
+DELETE genre FROM Movies WHERE id = c8225135-d116-4bd3-8fd3-c89aeb6e2745;
+
+// LIST LIST LIST LIST LIST LIST
+
+ALTER TABLE Movies ADD mainStars list<text>;
+
+// MAP MAP MAP MAP MAP MAP MAP MAP
+
+ALTER TABLE Movies ADD ratings map<timestamp, int>;
+
+UPDATE Movies SET ratings = {'2016-10-27 13:00:00':8, '2016-10-27 13:00:01':6} WHERE id = c8225135-d116-4bd3-8fd3-c89aeb6e2745;
+
+
+
+// SISTA DELEN
+
+CREATE TABLE Disney_Characters (id int PRIMARY KEY, name text, animal text) WITH COMPACT STORAGE;

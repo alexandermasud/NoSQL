@@ -1,0 +1,100 @@
+CREATE KEYSPACE sensors WITH replication = { 'class': 'SimpleStrategy', 'replication_factor':1};
+
+USE sensors;
+
+CREATE TABLE Sensor_01 (aid int, temperature float, PRIMARY KEY (aid));
+INSERT INTO Sensor_01 (aid, temperature) VALUES (1, 1.09);
+INSERT INTO Sensor_01 (aid, temperature) VALUES (2, 0.98);
+INSERT INTO Sensor_01 (aid, temperature) VALUES (3, 1.01);
+INSERT INTO Sensor_01 (aid, temperature) VALUES (4, 1.02);
+
+
+CREATE TABLE Sensor_02_03 (aid int, room_name text, temperature int, time timeuuid,  PRIMARY KEY (aid));
+INSERT INTO Sensor_02_03 (aid, room_name, temperature, time) VALUES (1, 'Bedroom', 23, 00ccb950-10a1-11ea-8797-4f374dfd5a22);
+INSERT INTO Sensor_02_03 (aid, room_name, temperature, time) VALUES (2, 'Basement', 18, 00ecb950-11a1-11ea-8797-4f374dfd5a22);
+INSERT INTO Sensor_02_03 (aid, room_name, temperature, time) VALUES (3, 'Bedroom', 22,  00bcb950-07a1-11ea-8797-4f374dfd5a22);
+INSERT INTO Sensor_02_03 (aid, room_name, temperature, time) VALUES (4, 'Basement', 19, 00bcb950-08a1-11ea-8797-4f374dfd5a22);
+INSERT INTO Sensor_02_03 (aid, room_name, temperature, time) VALUES (5, 'Basement', 19, ce2a78b0-12b2-11ea-8787-4f374dfd5a22);
+
+
+CREATE TABLE Sensor_04 (aid int, doors_locked map<text, boolean>, PRIMARY KEY (aid));
+INSERT INTO Sensor_04 (aid, doors_locked) VALUES (1, {'entry_door': true, 'backyard_door': true, 'basement_door': true, 'garage_door': true});
+INSERT INTO Sensor_04 (aid, doors_locked) VALUES (2, {'entry_door': false, 'backyard_door': true, 'basement_door': true, 'garage_door': true});
+INSERT INTO Sensor_04 (aid, doors_locked) VALUES (3, {'entry_door': true, 'backyard_door': true, 'basement_door': true, 'garage_door': true});
+INSERT INTO Sensor_04 (aid, doors_locked) VALUES (4, {'entry_door': true, 'backyard_door': true, 'basement_door': true, 'garage_door': false});
+
+
+CREATE TABLE Sensor_05 (aid int, electricity_consumption map<timeuuid, int>, PRIMARY KEY (aid));
+INSERT INTO Sensor_05 (aid, electricity_consumption) VALUES (1, {now(): 12});
+INSERT INTO Sensor_05 (aid, electricity_consumption) VALUES (2, {now(): 10});
+INSERT INTO Sensor_05 (aid, electricity_consumption) VALUES (3, {now(): 9});
+INSERT INTO Sensor_05 (aid, electricity_consumption) VALUES (4, {now(): 1});
+
+
+CREATE TABLE Sensor_06 (aid int, sensor_name text, sensor_time uuid, sensor_value float, PRIMARY KEY (aid));
+INSERT INTO Sensor_06 (aid, sensor_name, sensor_time, sensor_value) VALUES (1, 'N', now(), 6.3);
+INSERT INTO Sensor_06 (aid, sensor_name, sensor_time, sensor_value) VALUES (2, 'E', now(), 6.0);
+INSERT INTO Sensor_06 (aid, sensor_name, sensor_time, sensor_value) VALUES (3, 'S', now(), 7.1);
+INSERT INTO Sensor_06 (aid, sensor_name, sensor_time, sensor_value) VALUES (4, 'W', now(), 6.5);
+
+INSERT INTO Sensor_06 (aid, sensor_name, sensor_time, sensor_value) VALUES (5, 'N', now(), 6.7);
+INSERT INTO Sensor_06 (aid, sensor_name, sensor_time, sensor_value) VALUES (6, 'E', now(), 6.0);
+INSERT INTO Sensor_06 (aid, sensor_name, sensor_time, sensor_value) VALUES (7, 'S', now(), 7.0);
+INSERT INTO Sensor_06 (aid, sensor_name, sensor_time, sensor_value) VALUES (8, 'W', now(), 6.6);
+
+INSERT INTO Sensor_06 (aid, sensor_name, sensor_time, sensor_value) VALUES (9, 'N', now(), 6.8);
+INSERT INTO Sensor_06 (aid, sensor_name, sensor_time, sensor_value) VALUES (10, 'E', now(), 6.2);
+INSERT INTO Sensor_06 (aid, sensor_name, sensor_time, sensor_value) VALUES (11, 'S', now(), 7.2);
+INSERT INTO Sensor_06 (aid, sensor_name, sensor_time, sensor_value) VALUES (12, 'W', now(), 6.4);
+
+INSERT INTO Sensor_06 (aid, sensor_name, sensor_time, sensor_value) VALUES (14, 'N', now(), 6.8);
+INSERT INTO Sensor_06 (aid, sensor_name, sensor_time, sensor_value) VALUES (15, 'E', now(), 6.7);
+INSERT INTO Sensor_06 (aid, sensor_name, sensor_time, sensor_value) VALUES (16, 'S', now(), 7.0);
+
+INSERT INTO Sensor_06 (aid, sensor_name, sensor_time, sensor_value) VALUES (17, 'N', now(), 6.9);
+INSERT INTO Sensor_06 (aid, sensor_name, sensor_time, sensor_value) VALUES (18, 'E', now(), 6.7);
+INSERT INTO Sensor_06 (aid, sensor_name, sensor_time, sensor_value) VALUES (19, 'S', now(), 7.0);
+
+INSERT INTO Sensor_06 (aid, sensor_name, sensor_time, sensor_value) VALUES (20, 'N', now(), 7.2);
+INSERT INTO Sensor_06 (aid, sensor_name, sensor_time, sensor_value) VALUES (21, 'S', now(), 7.2);
+
+INSERT INTO Sensor_06 (aid, sensor_name, sensor_time, sensor_value) VALUES (22, 'N', now(), 7.3);
+
+COPY Sensor_01 TO '/vagrant_data/dbdumpar/cassandra/sensor_01.csv';
+COPY Sensor_02_03 TO '/vagrant_data/dbdumpar/cassandra/sensor_02_03.csv';
+COPY Sensor_04 TO '/vagrant_data/dbdumpar/cassandra/sensor_04.csv';
+COPY Sensor_05 TO '/vagrant_data/dbdumpar/cassandra/sensor_05.csv';
+COPY Sensor_06 TO '/vagrant_data/dbdumpar/cassandra/sensor_06.csv';
+
+DROP KEYSPACE sensors;
+
+
+
+---------------------------------------------------------------------------
+
+CREATE KEYSPACE sensors WITH replication = { 'class': 'SimpleStrategy', 'replication_factor':1};
+
+USE sensors;
+
+CREATE TABLE Sensor_01 (aid int, temperature float, PRIMARY KEY (aid));
+COPY Sensor_01 (aid, temperature) FROM '/vagrant_data/dbdumpar/cassandra/sensor_01.csv';
+CREATE TABLE Sensor_02_03 (aid int, room_name text, temperature int, time timeuuid,  PRIMARY KEY (aid));
+COPY Sensor_02_03 (aid, room_name, temperature, time) FROM '/vagrant_data/dbdumpar/cassandra/sensor_02_03.csv';
+CREATE TABLE Sensor_04 (aid int, doors_locked map<text, boolean>, PRIMARY KEY (aid));
+COPY Sensor_04 (aid, doors_locked) FROM '/vagrant_data/dbdumpar/cassandra/sensor_04.csv';
+CREATE TABLE Sensor_05 (aid int, electricity_consumption map<timeuuid, int>, PRIMARY KEY (aid));
+COPY Sensor_05 (aid, electricity_consumption) FROM '/vagrant_data/dbdumpar/cassandra/sensor_05.csv';
+CREATE TABLE Sensor_06 (aid int, sensor_name text, sensor_time uuid, sensor_value float, PRIMARY KEY (aid));
+COPY Sensor_06 (aid, sensor_name, sensor_time, sensor_value) FROM '/vagrant_data/dbdumpar/cassandra/sensor_06.csv';
+
+
+SELECT WRITETIME (time) FROM Sensor_02_03 WHERE aid = 5;
+
+INSERT INTO Sensor_06 (aid, sensor_name, sensor_time, sensor_value) VALUES (23, 'S', now(), 6.9);
+
+CREATE INDEX ON Sensor_06 (sensor_name);
+SELECT avg(sensor_value) FROM Sensor_06 WHERE sensor_name = 'N';
+
+INSERT INTO Sensor_01 (aid, temperature) VALUES (5, 1.01) USING TTL 3600;
+
+SELECT TTL (temperature) FROM Sensor_01 WHERE aid = 5 ALLOW FILTERING;

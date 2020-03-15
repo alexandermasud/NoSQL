@@ -1,0 +1,13 @@
+// 5A ALLA TÄNKBARA VÄGAR
+
+MATCH path = (START:START {name:"START"})-[:PATH*1..43]->(GOAL:GOAL {name:"GOAL"})
+RETURN path
+
+
+// 5B VIKTAT KORTASTE VÄGEN
+
+MATCH path = (START:START {name:"START"})-[:PATH*1..43]->(GOAL:GOAL {name:"GOAL"}) 
+RETURN path AS shortestPath,
+reduce(length=0, r in relationships(path) | length+r.length) AS totalLength order by totalLength limit 1
+
+

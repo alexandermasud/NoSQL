@@ -1,0 +1,61 @@
+create
+(START:START {name:"START"})-[:PATH {name:"0", length:0}]->(A:PATH{name:"A"}), 
+(A)-[:PATH {name:"0", length:0}]->(B:PATH{name:"B"}),
+(A)-[:PATH {name:"0", length:0}]->(C:PATH {name:"C"}),
+
+(START)-[:PATH {name:"0", length:0}]->(D:PATH {name:"D"}),
+(D)-[:PATH {name:"0", length:0}]->(E:PATH {name:"E"}),
+(E)-[:PATH {name:"0", length:0}]->(F:PATH {name:"F"}),
+(E)-[:PATH {name:"0", length:0}]->(G:PATH {name:"G"}),
+
+(D)-[:PATH {name:"0", length:0}]->(H:PATH {name:"H"}),
+(H)-[:PATH {name:"0", length:0}]->(I:PATH {name:"I"}),
+(I)-[:PATH {name:"0", length:0}]->(K:PATH {name:"K"}),
+(I)-[:PATH {name:"0", length:0}]->(J:PATH {name:"J"}),
+
+(START)-[:PATH {name:"0", length:0}]->(L:PATH {name:"L"}),
+(L)-[:PATH {name:"0", length:0}]->(M:PATH {name:"M"}),
+(M)-[:PATH {name:"0", length:0}]->(N:PATH {name:"N"}),
+(M)-[:PATH {name:"0", length:0}]->(O:PATH {name:"O"}),
+
+(H)-[:PATH {name:"Fire Dragon", length:2}]->(P:PATH {name:"P"}),
+(L)-[:PATH {name:"Wizard", length:4}]->(P),
+
+(P)-[:PATH {name:"0", length:0}]->(Q:PATH {name:"Q"}),
+(Q)-[:PATH {name:"0", length:0}]->(S:PATH {name:"S"}),
+(Q)-[:PATH {name:"0", length:0}]->(R:PATH {name:"R"}),
+
+(P)-[:PATH {name:"Blizzard Dragon", length:4}]->(T:PATH {name:"T"}),
+(T)-[:PATH {name:"0", length:0}]->(U:PATH {name:"U"}),
+(U)-[:PATH {name:"0", length:0}]->(W:PATH {name:"W"}),
+(U)-[:PATH {name:"0", length:0}]->(V:PATH {name:"V"}),
+
+(T)-[:PATH {name:"Zombie", length:2}]->(X:PATH {name:"X"}),
+(X)-[:PATH {name:"0", length:0}]->(Y:PATH {name:"Y"}),
+
+(T)-[:PATH {name:"Wizard", length:6}]->(Z:PATH {name:"Z"}),
+(Z)-[:PATH {name:"0", length:0}]->(a:PATH {name:"a"}),
+(a)-[:PATH {name:"0", length:0}]->(b:PATH {name:"b"}),
+(a)-[:PATH {name:"0", length:0}]->(c:PATH {name:"c"}),
+
+(X)-[:PATH {name:"GHOST", length:2}]->(d:PATH {name:"d"}),
+(Z)-[:PATH {name:"Thunder Dragon", length:4}]->(d),
+
+(d)-[:PATH {name:"Troll", length:2}]->(e:PATH {name:"e"}),
+(e)-[:PATH {name:"0", length:0}]->(f:PATH {name:"f"}),
+(f)-[:PATH {name:"0", length:0}]->(g:PATH {name:"g"}),
+(f)-[:PATH {name:"0", length:0}]->(h:PATH {name:"h"}),
+
+(d)-[:PATH {name:"Lightning Dragon", length:0}]->(i:PATH {name:"i"}),
+(e)-[:PATH {name:"Ghost Dragon", length:3}]->(i),
+
+(GOAL:GOAL {name:"GOAL"}),
+(i)-[:PATH {name:"0", length:0}]->(GOAL),
+
+(i)-[:PATH {name:"0", length:0}]->(j:PATH {name:"j"}),
+(j)-[:PATH {name:"0", length:0}]->(k:PATH {name:"k"}),
+(j)-[:PATH {name:"0", length:0}]->(l:PATH {name:"l"}),
+(j)-[:PATH {name:"0", length:0}]->(m:PATH {name:"m"}),
+
+(m)-[:PATH {name:"0", length:0}]->(o:PATH {name:"o"}),
+(m)-[:PATH {name:"0", length:0}]->(n:PATH {name:"n"})

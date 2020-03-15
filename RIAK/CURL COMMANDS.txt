@@ -32,3 +32,6 @@ less dumpedkeys.keys
 cd /vagrant_data/riak/riak-data-migrator-0.2.4/
 java -jar riak-data-migrator-0.2.4.jar -l -r /vagrant_data/dbdumpar/riak/ -b users -h localhost
 
+
+
+Made by Alexander Persson Masud

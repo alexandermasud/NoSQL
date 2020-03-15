@@ -1,0 +1,45 @@
+// Importerar och skapar en databas som heter "swimming" med en collection som heter "results" från filen butterfly.json
+cd vagrant_data
+mongoimport --db swimming --collection results --drop --file butterfly.json
+
+// Använder databasen "swimming"
+use swimming
+
+// Lägger in kategori, datum, header och content i dokumentet "results"
+db.results.insert({
+"category": "General",
+"date": new Date(),
+"header": "MongoDB-kommandon programmerade av ",
+"content": "Alexander Persson Masud"
+})
+
+// Söker i dokumentet results efter "Alexander Persson Masud" i "content"
+db.results.find({"content": "Alexander Persson Masud"}).pretty()
+
+// Tar fram alla tävlingar med senare datum än 2017-07-28
+db.results.find({date: {$gt:  "2017-07-28"}}).pretty()
+
+// Söker fram alla tävlingar inom 100 meter damerna i fjärilsim
+db.results.find({$and:[{"competition.gender": "Women"}, {"competition.distance": 100}, {"competition.style": "Butterfly"}] },{"competitors.name": 1} ).pretty();
+
+// Räknar fram antalet lopp i damernas fjärilsim som finns i databasen
+db.results.aggregate([{$match: {$and:[{"competition.gender": "Women"},{"competition.style": "Butterfly"}] } }, {$group:{"_id": "$competition.style", "count": {$sum: 1}}}])
+
+// Lägger till en ny tävlande, Fleming Fartland från Luxemburg, i herrarnas 200m fjäril med tiden 32.16.
+db.results.findAndModify({
+    query: { "competition.gender": "Men", "competition.distance": 200, "competition.style":"Butterfly" },
+    update: { $push: { "competitors": {"name": "Fleming Fartland", "country": "Luxemburg", "time": "32.16" }}},
+    new: true,
+    upsert : true
+})
+
+// Kontrollera om Fleming Fartland finns med herrarnas 200m fjäril
+db.results.find({$and:[{"competition.gender": "Men"}, {"competition.distance": 200}, {"competition.style": "Butterfly"}] },{"competitors.name": 1} ).pretty();
+
+
+// Exporterar en databas som heter "swimming" med en collection som heter "results" till filen butterfly.json
+cd vagrant_data/dbdumpar/mongdb
+mongoexport --db swimming --collection results --out butterfly.json
+
+
+av Alexander Persson Masud

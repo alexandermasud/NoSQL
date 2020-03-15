@@ -1,0 +1,4 @@
+4,"{'backyard_door': True, 'basement_door': True, 'entry_door': True, 'garage_door': False}"
+1,"{'backyard_door': True, 'basement_door': True, 'entry_door': True, 'garage_door': True}"
+2,"{'backyard_door': True, 'basement_door': True, 'entry_door': False, 'garage_door': True}"
+3,"{'backyard_door': True, 'basement_door': True, 'entry_door': True, 'garage_door': True}"

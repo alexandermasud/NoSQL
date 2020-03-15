@@ -1,0 +1,74 @@
+create
+(START:START {name:"START"})-[:PATH {name:"1", length:1}]->(A:PATH{name:"A"}), 
+(A)-[:PATH {name:"3", length:1}]->(B:PATH{name:"B"}),
+(A)-[:PATH {name:"1", length:1}]->(C:PATH {name:"C"}),
+
+(START)-[:PATH {name:"1", length:1}]->(D:PATH {name:"D"}),
+(D)-[:PATH {name:"1", length:1}]->(E:PATH {name:"E"}),
+(E)-[:PATH {name:"1", length:1}]->(F:PATH {name:"F"}),
+(E)-[:PATH {name:"2", length:2}]->(G:PATH {name:"G"}),
+
+(D)-[:PATH {name:"1", length:1}]->(H:PATH {name:"H"}),
+(H)-[:PATH {name:"2", length:2}]->(I:PATH {name:"I"}),
+(I)-[:PATH {name:"1", length:1}]->(K:PATH {name:"K"}),
+(I)-[:PATH {name:"2", length:2}]->(J:PATH {name:"J"}),
+
+(START)-[:PATH {name:"5", length:5}]->(L:PATH {name:"L"}),
+(L)-[:PATH {name:"1", length:1}]->(M:PATH {name:"M"}),
+(M)-[:PATH {name:"5", length:5}]->(N:PATH {name:"N"}),
+(M)-[:PATH {name:"1", length:1}]->(O:PATH {name:"O"}),
+
+(H)-[:PATH {name:"2", length:2}]->(P:PATH {name:"P"}),
+(L)-[:PATH {name:"4", length:4}]->(P),
+
+(P)-[:PATH {name:"2", length:2}]->(Q:PATH {name:"Q"}),
+(Q)-[:PATH {name:"2", length:2}]->(S:PATH {name:"S"}),
+(Q)-[:PATH {name:"1", length:1}]->(R:PATH {name:"R"}),
+
+(P)-[:PATH {name:"1", length:1}]->(T:PATH {name:"T"}),
+(T)-[:PATH {name:"2", length:2}]->(U:PATH {name:"U"}),
+(U)-[:PATH {name:"4", length:4}]->(W:PATH {name:"W"}),
+(U)-[:PATH {name:"3", length:3}]->(V:PATH {name:"V"}),
+
+(T)-[:PATH {name:"1", length:1}]->(X:PATH {name:"X"}),
+(X)-[:PATH {name:"3", length:3}]->(Y:PATH {name:"Y"}),
+
+(T)-[:PATH {name:"6", length:6}]->(Z:PATH {name:"Z"}),
+(Z)-[:PATH {name:"4", length:4}]->(a:PATH {name:"a"}),
+(a)-[:PATH {name:"2", length:2}]->(b:PATH {name:"b"}),
+(a)-[:PATH {name:"3", length:3}]->(c:PATH {name:"c"}),
+
+(X)-[:PATH {name:"1", length:1}]->(d:PATH {name:"d"}),
+(Z)-[:PATH {name:"4", length:4}]->(d),
+
+(d)-[:PATH {name:"2", length:2}]->(e:PATH {name:"e"}),
+(e)-[:PATH {name:"2", length:2}]->(f:PATH {name:"f"}),
+(f)-[:PATH {name:"4", length:4}]->(g:PATH {name:"g"}),
+(f)-[:PATH {name:"2", length:2}]->(h:PATH {name:"h"}),
+
+(d)-[:PATH {name:"10", length:10}]->(i:PATH {name:"i"}),
+(e)-[:PATH {name:"3", length:3}]->(i),
+
+(GOAL:GOAL {name:"GOAL"}),
+(i)-[:PATH {name:"1", length:1}]->(GOAL),
+
+(i)-[:PATH {name:"3", length:3}]->(j:PATH {name:"j"}),
+(j)-[:PATH {name:"1", length:1}]->(k:PATH {name:"k"}),
+(j)-[:PATH {name:"1", length:1}]->(l:PATH {name:"l"}),
+(j)-[:PATH {name:"3", length:3}]->(m:PATH {name:"m"}),
+
+(m)-[:PATH {name:"3", length:3}]->(o:PATH {name:"o"}),
+(m)-[:PATH {name:"2", length:2}]->(n:PATH {name:"n"})
+
+
+// 5A ALLA TÄNKBARA VÄGAR
+MATCH path = (START:START {name:"START"})-[:PATH*1..43]->(GOAL:GOAL {name:"GOAL"})
+RETURN path
+
+
+// 5B VIKTAT KORTASTE VÄGEN
+MATCH path = (START:START {name:"START"})-[:PATH*1..43]->(GOAL:GOAL {name:"GOAL"}) 
+RETURN path AS shortestPath,
+reduce(length=0, r in relationships(path) | length+r.length) AS totalLength order by totalLength limit 1
+
+

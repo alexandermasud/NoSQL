@@ -1,0 +1,42 @@
+sudo service mongodb start
+sudo service mongodb status
+
+// STarta shell
+mongo
+
+use databaser
+
+db.swimming.insert({
+"name": "MongoDB",
+"type": "Document database", "RDBMS equivalents": [{
+"database": "database" }, {
+"table": "collection" }, {
+           "row": "document"
+       }]
+})
+
+
+db.databaser.find()
+
+db.databaser.update({"name":"MongoDB"}, {$set: {"funfactor": 100},
+"$set": {"lastModified":new Date()}
+})
+
+db.databaser.find.pretty()
+
+
+// Exportera db "databaser"
+mongoexport --db swimming --collection results --out butterfly.json
+
+
+
+// importera db, döp databas till "bb", dör collection till "episodes", radera ev redan existerande db och importera data från filen bb.json
+mongoimport --db bb --collection episodes --drop --file bb.json
+
+
+
+
+
+// Ta bort "swimming"
+db.dropDatabase()
+

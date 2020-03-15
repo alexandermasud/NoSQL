@@ -1,0 +1,25 @@
+CREATE KEYSPACE sensors WITH replication = { 'class': 'SimpleStrategy', 'replication_factor':1};
+
+USE sensors;
+
+CREATE TABLE Sensor_01 (aid int, temperature float, PRIMARY KEY (aid));
+COPY Sensor_01 (aid, temperature) FROM '/vagrant_data/dbdumpar/cassandra/sensor_01.csv';
+CREATE TABLE Sensor_02_03 (aid int, room_name text, temperature int, time timeuuid,  PRIMARY KEY (aid));
+COPY Sensor_02_03 (aid, room_name, temperature, time) FROM '/vagrant_data/dbdumpar/cassandra/sensor_02_03.csv';
+CREATE TABLE Sensor_04 (aid int, doors_locked map<text, boolean>, PRIMARY KEY (aid));
+COPY Sensor_04 (aid, doors_locked) FROM '/vagrant_data/dbdumpar/cassandra/sensor_04.csv';
+CREATE TABLE Sensor_05 (aid int, electricity_consumption map<timeuuid, int>, PRIMARY KEY (aid));
+COPY Sensor_05 (aid, electricity_consumption) FROM '/vagrant_data/dbdumpar/cassandra/sensor_05.csv';
+CREATE TABLE Sensor_06 (aid int, sensor_name text, sensor_time uuid, sensor_value float, PRIMARY KEY (aid));
+COPY Sensor_06 (aid, sensor_name, sensor_time, sensor_value) FROM '/vagrant_data/dbdumpar/cassandra/sensor_06.csv';
+
+SELECT WRITETIME (time) FROM Sensor_02_03 WHERE aid = 5;
+
+INSERT INTO Sensor_06 (aid, sensor_name, sensor_time, sensor_value) VALUES (23, 'S', now(), 6.9);
+
+CREATE INDEX ON Sensor_06 (sensor_name);
+SELECT avg(sensor_value) FROM Sensor_06 WHERE sensor_name = 'N';
+
+INSERT INTO Sensor_01 (aid, temperature) VALUES (5, 1.01) USING TTL 3600;
+
+SELECT TTL (temperature) FROM Sensor_01 WHERE aid = 5 ALLOW FILTERING;

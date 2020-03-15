@@ -1,0 +1,64 @@
+sudo service neo4j status
+sudo service neo4j start
+
+
+MATCH (n) OPTIONAL MATCH (n)-[r]-() DELETE n,r
+
+
+// Skapar John och Lisa samt att John är vän med Lisa
+create(John:Person {name:"John"}),(Lisa:Person {name:"Lisa"}), (John)-[:FRIEND_OF]->(Lisa)
+
+match(j:Person {name:"John"}) create (Mia:Person {name:"Mia"}), (j)-[:FRIEND_OF]->(Mia)
+
+match(l:Person {name:"Lisa"}), CREATE (l)-[:FRIEND_OF]->(Mia)
+
+match(m:Person {name:"Mia"}) (l)-[:FRIEND_OF]->(j)
+
+CREATE (m)-[:FRIEND]->(:Person {name:John}))
+
+
+
+
+
+--------------
+VEM GJORDE VAD?
+
+
+create(jane:Member {name: "Jane"}),(jim:Member {name: "Jim"}),(frank:Member {name: "Frank"}),(billy:Member {name: "Billy"}),(liza:Member{name:"Liza "}), (mark:Member {name: "Mark"}),(mary:Member {name: "Mary"}),(viv:Member {name:"Vivian"}),
+(slu1:Lineup {name:"Mark 1"}),(slu2:Lineup {name:"Mark 2"}),(smlu1:Lineup {name:"Mark 1"}),
+(starfighters:Band {name:"Starfighters"}),(smash:Band {name:"Smash"}), (slu1)-[:OF]->(starfighters),(slu2)-[:OF]->(starfighters),(smlu1)-[:OF]- >(smash),
+(jane)-[:BELONGS_TO]->(slu1), (jim)-[:BELONGS_TO]->(slu1), (frank)-[:BELONGS_TO]->(slu1), (jane)-[:BELONGS_TO]->(slu2), (billy)-[:BELONGS_TO]->(slu2), (liza)-[:BELONGS_TO]->(slu2), (jane)-[:BELONGS_TO]->(smlu1), (mark)-[:BELONGS_TO]->(smlu1), (mary)-[:BELONGS_TO]->(smlu1), (viv)-[:BELONGS_TO]->(smlu1), (mary)-[:BELONGS_TO]->(slu2), (first:Record {name:"First"}), (blue:Record{name:"Blue"}), (super:Record{name:"Super songs"}), (wow:Record{name:"Wow!"}), (slu1)-[:MADE]->(first), (slu1)-[:MADE]->(blue), (slu2)-[:MADE]->(super), (smlu1)-[:MADE]->(wow), (bas:Instrument {name:"Bas"}), (git:Instrument {name:"Gitarr"}), (voc:Instrument {name:"Sång"}), (key:Instrument {name:"Keyboard"}), (drm:Instrument {name:"Trummor"}), (jane)-[:PLAYS]->(voc), (jane)-[:PLAYS]->(bas), (jim)-[:PLAYS]->(git), (frank)-[:PLAYS]->(drm), (billy)-[:PLAYS]->(drm), (liza)-[:PLAYS]->(git), (mary)-[:PLAYS]->(drm), (mark)-[:PLAYS]->(git), (viv)-[:PLAYS]->(key),
+(murphy:Member {name:"Murphy"}), (murphy)-[:PLAYS]->(key), (murphy)-[:PLAYS]->(git), (murphy)-[:SESSION_MUSICIAN_ON]->(blue)
+
+// VILKA MEDLEMMAR GJORDE SKRIVAN BLUE?
+
+match(m:Member)-[:BELONGS_TO]-(lu:Lineup)-[:MADE]->(:Record {name:"Blue"}) return m
+
+// VILKA MEDLEMMAR SPELAR GITARR
+
+match(m:Member)-[:PLAYS]->(i:Instrument {name:"Gitarr"}) return m
+
+----------------
+AVSTÅND MELLAN X & Y
+
+create(a:TOWN {name:"A"})-[:ROAD {name:"5", length:5}]->(b:TOWN{name:"B"}), (b)-[:ROAD {name:"1", length:1}]->(c:TOWN {name:"C"}),
+(c)-[:ROAD {name:"1", length:1}]->(e:TOWN {name:"E"}),
+(e)-[:ROAD {name:"1", length:1}]->(g:TOWN {name:"G"}),
+(g)-[:ROAD {name:"1", length:1}]->(h:TOWN {name:"H"}), (b)-[:ROAD {name:"7", length:7}]->(h),
+(b)-[:ROAD {name:"4", length:4}]->(f:TOWN {name:"F"}), (f)-[:ROAD {name:"2", length:2}]->(h)
+
+
+// KORTASTE VÄGEN MELLAN A & h  shortestPATH
+MATCH path = shortestPath((a:TOWN {name:"A"})-[:ROAD*1..7]->(h:TOWN {name:"H"}))
+RETURN path
+
+// DE OLIKA VÄGARNAS LÄNGD MELLAN A OCH H
+
+MATCH p=(a {name:"A"})-[:ROAD*1..7]->(h{name:"H"}) RETURN p AS shortestPath,
+reduce(length=0, r in relationships(p) | length+r.length) AS totalLength order by totalLength
+
+// DEN ABSOLUT KORTASTE VÄGEN
+
+MATCH p=(a {name:"A"})-[:ROAD*1..7]->(h{name:"H"}) RETURN p AS shortestPath,
+reduce(length=0, r in relationships(p) | length+r.length) AS totalLength
+order by totalLength limit 1
